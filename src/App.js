@@ -1,5 +1,4 @@
-import { assertNoop } from '@babel/types';
-import React, {useEffect, useState} from 'react'
+import React, { useState} from 'react'
 import Geogebra from 'react-geogebra'
 
 function App() {
@@ -22,7 +21,7 @@ function App() {
   function changeFunction(event) {
     const app = window.mainDisplay;
 
-    if(currentFunctionLabel != "") {
+    if(currentFunctionLabel !== "") {
       app.deleteObject(currentFunctionLabel)
 
       console.log("Last object deleted");
@@ -57,8 +56,6 @@ function App() {
     console.log("Function value updated")
   }
 
-  
-
   return (
     <div className="min-h-screen p-6 bg-slate-500">
       <Geogebra
@@ -73,13 +70,12 @@ function App() {
         perspective={'G'}
       />
 
-
       <div className="bg-white m-5 p-6 w-half">
-        <input type="text" value={currentFunction} onChange={changeFunction}/>
+        <input type="text" value={currentFunction} onChange={changeFunction} disabled={!appletLoaded}/>
       </div>
 
       <div className="bg-white m-5 p-6 w-half">
-        <input type="text" value={inputValue} onChange={processInput}/>
+        <input type="text" value={inputValue} onChange={processInput} disabled={!appletLoaded}/>
       </div>
 
       <div className="bg-white m-5 p-6 w-half">
