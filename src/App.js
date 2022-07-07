@@ -58,7 +58,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-500">
-      <div className="m-5 p-6">
+      <div className="mx-6 pt-6">
         <Geogebra
           id="mainDisplay"
           width="800"
@@ -72,15 +72,15 @@ function App() {
         />
       </div>
 
-      <div className="bg-white m-5 p-6 w-half">
+      <div className="bg-white m-6 p-6 w-half">
         Equation (in terms of x): <input className="bg-slate-300" type="text" value={currentFunction} onChange={changeFunction} disabled={!appletLoaded}/>
       </div>
 
-      <div className="bg-white m-5 p-6 w-half">
+      <div className="bg-white m-6 p-6 w-half">
         Input: <input className="bg-slate-300" type="text" value={inputValue} onChange={processInput} disabled={!appletLoaded}/>
       </div>
 
-      <div className="bg-white m-5 p-6 w-half">
+      <div className="bg-white m-6 p-6 w-half">
         Output: {outputValue}
       </div>
     </div>
