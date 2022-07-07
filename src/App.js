@@ -24,14 +24,20 @@ function App() {
 
     if(currentFunctionLabel != "") {
       app.deleteObject(currentFunctionLabel)
+
+      console.log("Last object deleted");
     }
 
     setCurrentFunction(event.target.value);
 
     setCurrentFunctionLabel(app.evalCommandGetLabels(event.target.value));
 
+    console.log("Function Updated");
+
     if(inputValue !== "") {
       setOutputValue(app.evalCommandCAS(event.target.value.replace("x", "(" + inputValue + ")")));
+
+      console.log("Function value updated");
     }
   }
 
@@ -40,12 +46,15 @@ function App() {
 
     setInputValue(event.target.value);
 
+    console.log("Input value updated")
+
     if(event.target.value !== "") {
       setOutputValue(app.evalCommandCAS(currentFunction.replace("x", "(" + event.target.value + ")")));
     } else {
       setOutputValue("");
     }
 
+    console.log("Function value updated")
   }
 
   
