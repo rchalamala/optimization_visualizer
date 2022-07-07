@@ -1,23 +1,81 @@
-import logo from './logo.svg';
-import './App.css';
+import { assertNoop } from '@babel/types';
+import React, {useEffect, useState} from 'react'
+import Geogebra from 'react-geogebra'
 
 function App() {
+  const [appletLoaded, setAppletLoaded] = useState(false);
+  const [currentFunction, setCurrentFunction] = useState("");
+  const [currentFunctionLabel, setCurrentFunctionLabel] = useState("");
+  const [inputValue, setInputValue] = useState(0);
+  const [outputValue, setOutputValue] = useState(0);
+
+  function appletOnLoad() {
+    const app = window.mainDisplay;
+
+    app.setGridVisible(true);
+
+    setAppletLoaded(true)
+
+    console.log("Applet Loaded");
+  }
+
+  function changeFunction(event) {
+    const app = window.mainDisplay;
+
+    if(currentFunctionLabel != "") {
+      app.deleteObject(currentFunctionLabel)
+    }
+
+    setCurrentFunction(event.target.value);
+
+    setCurrentFunctionLabel(app.evalCommandGetLabels(event.target.value));
+
+    if(inputValue !== "") {
+      setOutputValue(app.evalCommandCAS(event.target.value.replace("x", "(" + inputValue + ")")));
+    }
+  }
+
+  function processInput(event) {
+    const app = window.mainDisplay;
+
+    setInputValue(event.target.value);
+
+    if(event.target.value !== "") {
+      setOutputValue(app.evalCommandCAS(currentFunction.replace("x", "(" + event.target.value + ")")));
+    } else {
+      setOutputValue("");
+    }
+
+  }
+
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-h-screen p-6 bg-slate-500">
+      <Geogebra
+        id="mainDisplay"
+        width="800"
+        height="600"
+        showMenuBar
+        showToolBar
+        showAlgebraInput
+        appletOnLoad={appletOnLoad}
+        errorDialogsActive={false}
+        perspective={'G'}
+      />
+
+
+      <div className="bg-white m-5 p-6 w-half">
+        <input type="text" value={currentFunction} onChange={changeFunction}/>
+      </div>
+
+      <div className="bg-white m-5 p-6 w-half">
+        <input type="text" value={inputValue} onChange={processInput}/>
+      </div>
+
+      <div className="bg-white m-5 p-6 w-half">
+        Output: {outputValue}
+      </div>
     </div>
   );
 }
