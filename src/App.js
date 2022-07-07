@@ -58,18 +58,19 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-500">
-      <Geogebra
-        className="m-5 p-6"
-        id="mainDisplay"
-        width="800"
-        height="600"
-        showMenuBar
-        showToolBar
-        showAlgebraInput
-        appletOnLoad={appletOnLoad}
-        errorDialogsActive={false}
-        perspective={'G'}
-      />
+      <div className="m-5 p-6">
+        <Geogebra
+          id="mainDisplay"
+          width="800"
+          height="600"
+          showMenuBar
+          showToolBar
+          showAlgebraInput
+          appletOnLoad={appletOnLoad}
+          errorDialogsActive={false}
+          perspective={'G'}
+        />
+      </div>
 
       <div className="bg-white m-5 p-6 w-half">
         Equation (in terms of x): <input className="bg-slate-300" type="text" value={currentFunction} onChange={changeFunction} disabled={!appletLoaded}/>
