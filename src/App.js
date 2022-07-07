@@ -71,11 +71,11 @@ function App() {
       />
 
       <div className="bg-white m-5 p-6 w-half">
-        <input type="text" value={currentFunction} onChange={changeFunction} disabled={!appletLoaded}/>
+        Equation (in terms of x): <input className="bg-slate-300" type="text" value={currentFunction} onChange={changeFunction} disabled={!appletLoaded}/>
       </div>
 
       <div className="bg-white m-5 p-6 w-half">
-        <input type="text" value={inputValue} onChange={processInput} disabled={!appletLoaded}/>
+        Input: <input className="bg-slate-300" type="text" value={inputValue} onChange={processInput} disabled={!appletLoaded}/>
       </div>
 
       <div className="bg-white m-5 p-6 w-half">
