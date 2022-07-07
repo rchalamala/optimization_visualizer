@@ -57,7 +57,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-slate-500">
+    <div className="min-h-screen m-5 p-6 bg-slate-500">
       <Geogebra
         id="mainDisplay"
         width="800"
