@@ -34,7 +34,7 @@ function App() {
     console.log("Function Updated");
 
     if(inputValue !== "") {
-      setOutputValue(app.evalCommandCAS(event.target.value.replace("x", "(" + inputValue + ")")));
+      setOutputValue(app.evalCommandCAS(event.target.value.replace(/x/g, "(" + inputValue + ")")));
 
       console.log("Function value updated");
     }
@@ -48,7 +48,7 @@ function App() {
     console.log("Input value updated")
 
     if(event.target.value !== "") {
-      setOutputValue(app.evalCommandCAS(currentFunction.replace("x", "(" + event.target.value + ")")));
+      setOutputValue(app.evalCommandCAS(currentFunction.replace(/x/g, "(" + event.target.value + ")")));
     } else {
       setOutputValue("");
     }
