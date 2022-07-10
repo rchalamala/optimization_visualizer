@@ -8,10 +8,6 @@ function App() {
     const [functionEquation, setFunctionEquation] = useState("");
     const [functionEquationLabel, setFunctionEquationLabel] = useState("");
     const [functionValid, setFunctionValid] = useState(false);
-    const [inputValue, setInputValue] = useState(0);
-    const [outputValue, setOutputValue] = useState(0);
-    const [sampleCount, setSampleCount] = useState(0);
-    const [sampleLabels, setSampleLabels] = useState([]);
     const [populationAndLabels, setPopulationAndLabels] = useState([[], []]);
     const [lowerBound, setLowerBound] = useState(0);
     const [upperBound, setUpperBound] = useState(0);
@@ -34,63 +30,14 @@ function App() {
 
             console.log("Last object deleted");
         }
-        console.log(!appletLoaded || !functionValid)
-        console.log(!appletLoaded)
-        console.log(!functionValid)
 
         setFunctionValid(evaluate(event.target.value, 0) !== "" && evaluate(event.target.value, 0) !== "?");
-
-        console.log(functionValid)
 
         setFunctionEquation(event.target.value);
 
         setFunctionEquationLabel(app.evalCommandGetLabels(event.target.value));
 
         console.log("Function updated");
-
-        if (inputValue !== "") {
-            setOutputValue(evaluate(event.target.value, inputValue));
-
-            console.log("Function value updated");
-        }
-    }
-
-    const processInput = (event) => {
-        setInputValue(event.target.value);
-
-        console.log("Input value updated");
-
-        setOutputValue(evaluate(functionEquation, event.target.value));
-
-        console.log("Output value updated")
-    }
-
-
-    const generateSamples = () => {
-        const app = window.mainDisplay;
-
-        let values = [];
-
-        for (let i = 0; i < sampleCount; ++i) {
-            const x = randomNumberInRange(-1, 1);
-            values.push(x);
-        }
-
-        setSampleLabels(addPoints(functionEquation, values));
-
-        console.log("Generated samples");
-    }
-
-    const removeSamples = () => {
-        removePoints(sampleLabels);
-
-        console.log("Removed samples");
-    }
-
-    const processSampleCount = (event) => {
-        setSampleCount(event.target.value);
-
-        console.log("Sample count updated");
     }
 
     const processLowerBound = (event) => {
@@ -102,8 +49,7 @@ function App() {
     }
 
     const evolveGeneticAlgorithm = () => {
-        console.log(populationAndLabels);
-        setPopulationAndLabels(GeneticAlgorithm(10, populationAndLabels[0], populationAndLabels[1], functionEquation, lowerBound, upperBound, 2, 0.8, 0.15));
+        setPopulationAndLabels(GeneticAlgorithm(100, populationAndLabels[0], populationAndLabels[1], functionEquation, lowerBound, upperBound, 3, 5, 0.8));
     }
 
     const resetGeneticAlgorithm = () => {
@@ -117,8 +63,8 @@ function App() {
             <div className="mx-6 pt-6">
                 <Geogebra
                     id="mainDisplay"
-                    width="800"
-                    height="600"
+                    width="400"
+                    height="400"
                     showMenuBar
                     showToolBar
                     showAlgebraInput
@@ -133,33 +79,6 @@ function App() {
                     Equation (in terms of x): <input className="bg-slate-300" type="text" value={functionEquation}
                                                      onChange={changeFunction} disabled={!appletLoaded}/>
                 </div>
-
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    Input: <input className="bg-slate-300" type="text" value={inputValue} onChange={processInput}
-                                  disabled={!appletLoaded || !functionValid}/>
-                </div>
-
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    Output: {outputValue}
-                </div>
-
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    Samples: <input className="bg-slate-300" type="text" value={sampleCount} onChange={processSampleCount}
-                                    disabled={!appletLoaded || !functionValid}/>
-                </div>
-
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    <button className="bg-slate-300" onClick={generateSamples} disabled={!appletLoaded || !functionValid}>
-                        Generate Samples
-                    </button>
-                </div>
-
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    <button className="bg-slate-300" onClick={removeSamples} disabled={!appletLoaded || !functionValid}>
-                        Remove Samples
-                    </button>
-                </div>
-
 
                 <div className="bg-white m-3 p-3 w-half h-10">
                     Lower Bound: <input className="bg-slate-300" type="text" value={lowerBound} onChange={processLowerBound}
