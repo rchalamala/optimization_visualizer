@@ -75,12 +75,12 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen bg-whites flex flex-row">
+        <div className="min-h-screen flex flex-col items-center md:flex-row">
             <div className="p-6">
                 <Geogebra
                     id="mainDisplay"
-                    width="400"
-                    height="400"
+                    width="500"
+                    height="500"
                     showMenuBar={false}
                     showToolBar={false}
                     showAlgebraInput
@@ -90,7 +90,7 @@ function App() {
                 />
             </div>
 
-            <div className="p-6 flex flex-col">
+            <div className="p-6 flex flex-row">
                 <div className="w-half flex flex-col">
                     Equation (in terms of x and y):
                         <input className="border rounded px-2" type="text" value={functionEquation}
@@ -111,7 +111,9 @@ function App() {
                     <button className="border rounded mt-6 px-2" onClick={resetGeneticAlgorithm} disabled={!appletLoaded}>
                         Reset Genetic Algorithm
                     </button>
-                    </div>
+
+                    Note: Right Click for Zoom to Fit
+                </div>
             </div>
         </div>
     );
