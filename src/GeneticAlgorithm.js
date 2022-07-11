@@ -20,8 +20,8 @@ const Crossover = (parent1, parent2, dimension) => {
     let child2 = [];
 
     let a = 0.5;
-    
-    for(let i = 0; i < dimension - 1; ++i) {
+
+    for (let i = 0; i < dimension - 1; ++i) {
         let d = Math.abs(parent1[i] - parent2[i]);
 
         let bounds = [Math.min(parent1[i], parent2[i]) - a * d, Math.max(parent1[i], parent2[i]) + a * d];
@@ -38,9 +38,9 @@ const Mutate = (parent, dimension) => {
 
     let gene = randomNumberInRange(0, dimension - 1);
 
-    for(let i = 0; i < dimension - 1; ++i) {
+    for (let i = 0; i < dimension - 1; ++i) {
         child.push(parent[i]);
-        if(i === gene) {
+        if (i === gene) {
             child[i] += gaussianRandom(0, 1);
         }
     }
@@ -51,7 +51,7 @@ const Mutate = (parent, dimension) => {
 // -(1+cos(12*sqrt(x^2+y^2)))/(0.5*(x^2+y^2)+2) [-5.12, 5.12]
 const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLabels, functionEquation, lowerBound, upperBound, dimension, eliteCount, crossoverProbability) => {
     if (currentPopulation.length === 0) {
-        let population = InitializePopulation(populationSize, parseFloat(lowerBound), parseFloat(upperBound), dimension);
+        let population = InitializePopulation(populationSize, lowerBound, upperBound, dimension);
 
         return [population, addPoints(functionEquation, population)];
     }
@@ -74,7 +74,7 @@ const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLa
 
     for (let i = 0; i < populationSize; ++i) {
         newPopulation[i] = currentPopulation[indices[i]];
-        if(i === 0) {
+        if (i === 0) {
             console.log(currentPopulation[indices[i]]);
             console.log(currentPopulationFitness[indices[i]]);
         }
@@ -91,7 +91,7 @@ const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLa
 
     for (let i = 0; i < populationSize; ++i) {
         currentPopulation[i] = newPopulation[i];
-        if(i >= eliteCount && i < eliteCount + crossoverCount) {
+        if (i >= eliteCount && i < eliteCount + crossoverCount) {
             sum += currentPopulationFitness[eliteCount + i];
         }
     }
@@ -124,7 +124,7 @@ const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLa
         newPopulation[eliteCount + i + 1] = offspring[1];
     }
 
-    for(let i = 0; i < populationSize - eliteCount - crossoverCount; ++i) {
+    for (let i = 0; i < populationSize - eliteCount - crossoverCount; ++i) {
         newPopulation[eliteCount + crossoverCount + i] = Mutate(currentPopulation[eliteCount + crossoverCount + i], dimension);
     }
 

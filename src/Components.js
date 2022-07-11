@@ -3,7 +3,7 @@ function evaluate(functionEquation, x) {
 
     //console.log("Function value evaluated");
 
-    if(x.length === 1) {
+    if (x.length === 1) {
         return x === "" ? "" : parseFloat(app.evalCommandCAS("Numeric(" + functionEquation.replace(/x/g, "(" + x[0] + ")") + ", 50)"));
     } else {
         //console.log(app.evalCommandCAS("Numeric(" + functionEquation.replace(/x/g, "(" + x[0] + ")").replace(/y/g, "(" + x[1] + ")") + ", 50)"));

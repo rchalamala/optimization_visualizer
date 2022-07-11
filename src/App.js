@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Geogebra from 'react-geogebra'
-import {evaluate, randomNumberInRange, addPoints, removePoints} from './Components'
-import {GeneticAlgorithm} from "./GeneticAlgorithm";
+import { evaluate, removePoints } from './Components'
+import { GeneticAlgorithm } from "./GeneticAlgorithm";
 
 function App() {
     const [appletLoaded, setAppletLoaded] = useState(false);
@@ -11,6 +11,7 @@ function App() {
     const [populationAndLabels, setPopulationAndLabels] = useState([[], []]);
     const [lowerBound, setLowerBound] = useState(0);
     const [upperBound, setUpperBound] = useState(0);
+    const [dimension, setDimension] = useState(2);
 
     const appletOnLoad = () => {
         const app = window.mainDisplay;
@@ -48,8 +49,20 @@ function App() {
         setUpperBound(event.target.value);
     }
 
+    const processDimension = (event) => {
+        const app = window.mainDisplay;
+
+        setDimension(event.target.value);
+
+        if(parseInt(event.target.value) === 3) {
+            app.setPerspective('T');
+        } else {
+            app.setPerspective('G');
+        }
+    }
+
     const evolveGeneticAlgorithm = () => {
-        setPopulationAndLabels(GeneticAlgorithm(100, populationAndLabels[0], populationAndLabels[1], functionEquation, lowerBound, upperBound, 3, 5, 0.8));
+        setPopulationAndLabels(GeneticAlgorithm(100, populationAndLabels[0], populationAndLabels[1], functionEquation, parseFloat(lowerBound), parseFloat(upperBound), parseInt(dimension), 5, 0.8));
     }
 
     const resetGeneticAlgorithm = () => {
@@ -65,8 +78,8 @@ function App() {
                     id="mainDisplay"
                     width="400"
                     height="400"
-                    showMenuBar
-                    showToolBar
+                    showMenuBar={false}
+                    showToolBar={false}
                     showAlgebraInput
                     appletOnLoad={appletOnLoad}
                     errorDialogsActive={false}
@@ -77,17 +90,23 @@ function App() {
             <div className="grid grid-cols-2 gap-2">
                 <div className="bg-white m-3 p-3 w-half h-10">
                     Equation (in terms of x): <input className="bg-slate-300" type="text" value={functionEquation}
-                                                     onChange={changeFunction} disabled={!appletLoaded}/>
+                        onChange={changeFunction} disabled={!appletLoaded} />
                 </div>
 
                 <div className="bg-white m-3 p-3 w-half h-10">
                     Lower Bound: <input className="bg-slate-300" type="text" value={lowerBound} onChange={processLowerBound}
-                                    disabled={!appletLoaded || !functionValid}/>
+                        disabled={!appletLoaded || !functionValid} />
                 </div>
 
                 <div className="bg-white m-3 p-3 w-half h-10">
                     Upper Bound: <input className="bg-slate-300" type="text" value={upperBound} onChange={processUpperBound}
-                                        disabled={!appletLoaded || !functionValid}/>
+                        disabled={!appletLoaded || !functionValid} />
+                </div>
+
+
+                <div className="bg-white m-3 p-3 w-half h-10">
+                    Dimension: <input className="bg-slate-300" type="text" value={dimension} onChange={processDimension}
+                        disabled={!appletLoaded || !functionValid} />
                 </div>
 
                 <div className="bg-white m-3 p-3 w-half h-10">
