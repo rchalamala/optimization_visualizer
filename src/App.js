@@ -93,23 +93,23 @@ function App() {
             <div className="p-6 flex flex-col">
                 <div className="w-half flex flex-col">
                     Equation (in terms of x and y):
-                        <input className="border rounded" type="text" value={functionEquation}
+                        <input className="border rounded px-2" type="text" value={functionEquation}
                                 onChange={changeFunction} ref={ref} disabled={!appletLoaded} />
 
                     Lower Bound:
-                    <input className="border rounded" type="text" value={lowerBound} onChange={processLowerBound}
+                    <input className="border rounded px-2" type="text" value={lowerBound} onChange={processLowerBound}
                         disabled={!appletLoaded} />
 
                     Upper Bound:
-                    <input className="border rounded" type="text" value={upperBound} onChange={processUpperBound}
+                    <input className="border rounded px-2" type="text" value={upperBound} onChange={processUpperBound}
                             disabled={!appletLoaded} />
 
-                    <button className="border rounded mt-6 w-half" onClick={evolveGeneticAlgorithm} disabled={!appletLoaded || !functionValid}>
+                    <button className="border rounded mt-6 px-2" onClick={evolveGeneticAlgorithm} disabled={!appletLoaded || !functionValid}>
                         Generate/Evolve Genetic Algorithm
                     </button>
 
-                    <button className="border rounded mt-6 w-half" onClick={resetGeneticAlgorithm} disabled={!appletLoaded}>
-                    Reset Genetic Algorithm
+                    <button className="border rounded mt-6 px-2" onClick={resetGeneticAlgorithm} disabled={!appletLoaded}>
+                        Reset Genetic Algorithm
                     </button>
                     </div>
             </div>
