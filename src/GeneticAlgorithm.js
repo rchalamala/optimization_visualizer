@@ -33,7 +33,7 @@ const Crossover = (parent1, parent2, dimension) => {
     return [child1, child2];
 }
 
-const Mutate = (parent, dimension) => {
+const Mutate = (parent, lowerBound, upperBound, dimension) => {
     let child = [];
 
     let gene = randomNumberInRange(0, dimension - 1);
@@ -41,7 +41,7 @@ const Mutate = (parent, dimension) => {
     for (let i = 0; i < dimension - 1; ++i) {
         child.push(parent[i]);
         if (i === gene) {
-            child[i] += gaussianRandom(0, 1);
+            child[i] += gaussianRandom(0, (upperBound - lowerBound));
         }
     }
 
@@ -125,7 +125,7 @@ const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLa
     }
 
     for (let i = 0; i < populationSize - eliteCount - crossoverCount; ++i) {
-        newPopulation[eliteCount + crossoverCount + i] = Mutate(currentPopulation[eliteCount + crossoverCount + i], dimension);
+        newPopulation[eliteCount + crossoverCount + i] = Mutate(currentPopulation[eliteCount + crossoverCount + i], lowerBound, upperBound, dimension);
     }
 
     return [newPopulation, addPoints(functionEquation, newPopulation)];

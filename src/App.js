@@ -62,7 +62,7 @@ function App() {
     }
 
     const evolveGeneticAlgorithm = () => {
-        setPopulationAndLabels(GeneticAlgorithm(100, populationAndLabels[0], populationAndLabels[1], functionEquation, parseFloat(lowerBound), parseFloat(upperBound), parseInt(dimension), 5, 0.8));
+        setPopulationAndLabels(GeneticAlgorithm(200, populationAndLabels[0], populationAndLabels[1], functionEquation, parseFloat(lowerBound), parseFloat(upperBound), parseInt(dimension), 1, 0.8));
     }
 
     const resetGeneticAlgorithm = () => {
