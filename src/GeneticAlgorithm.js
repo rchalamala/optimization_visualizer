@@ -1,14 +1,16 @@
-import { evaluate, randomNumberInRange, gaussianRandom, addPoints, removePoints } from './Components'
+import { evaluate, randomNumberInRange, gaussianRandom } from './Components'
 
-const InitializePopulation = (populationSize, lowerBound, upperBound, dimension) => {
+const InitializePopulation = (populationSize, functionEquation, lowerBound, upperBound, dimension) => {
     let population = new Array(populationSize);
-
+    
     for (let i = 0; i < populationSize; ++i) {
         if (dimension === 2) {
             population[i] = [randomNumberInRange(lowerBound, upperBound)];
         } else {
             population[i] = [randomNumberInRange(lowerBound, upperBound), randomNumberInRange(lowerBound, upperBound)];
         }
+        let fitness = evaluate(functionEquation, population[i]);
+        population[i].push(fitness);
     }
 
     return population;
@@ -33,7 +35,7 @@ const Crossover = (parent1, parent2, dimension) => {
     return [child1, child2];
 }
 
-const Mutate = (parent, dimension) => {
+const Mutate = (parent, lowerBound, upperBound, dimension) => {
     let child = [];
 
     let gene = randomNumberInRange(0, dimension - 1);
@@ -41,7 +43,7 @@ const Mutate = (parent, dimension) => {
     for(let i = 0; i < dimension - 1; ++i) {
         child.push(parent[i]);
         if(i === gene) {
-            child[i] += gaussianRandom(0, 1);
+            child[i] += gaussianRandom(0, (upperBound - lowerBound));
         }
     }
 
@@ -49,36 +51,40 @@ const Mutate = (parent, dimension) => {
 }
 // -cos(x)*cos(y)*e^(-((x)-pi)^2-((y)-pi)^2) [-100, 100]
 // -(1+cos(12*sqrt(x^2+y^2)))/(0.5*(x^2+y^2)+2) [-5.12, 5.12]
-const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLabels, functionEquation, lowerBound, upperBound, dimension, eliteCount, crossoverProbability) => {
-    if (currentPopulation.length === 0) {
-        let population = InitializePopulation(populationSize, parseFloat(lowerBound), parseFloat(upperBound), dimension);
-
-        return [population, addPoints(functionEquation, population)];
+const GeneticAlgorithm = (populationSize, currentPopulationAndFitness, functionEquation, lowerBound, upperBound, dimension, eliteCount, crossoverProbability) => {
+    if (currentPopulationAndFitness[0].length === 0) {
+        return InitializePopulation(populationSize, functionEquation, lowerBound, upperBound, dimension);
     }
 
-    removePoints(currentPopulationLabels);
+    let currentPopulation = new Array(populationSize);
 
-    let currentPopulationFitness = new Array(populationSize);
+    let populationFitness = new Array(populationSize);
+
     let indices = new Array(populationSize);
 
     for (let i = 0; i < populationSize; ++i) {
-        currentPopulationFitness[i] = evaluate(functionEquation, currentPopulation[i]);
+        currentPopulation[i] = currentPopulationAndFitness[i].slice(0, currentPopulationAndFitness[i].length - 1);
+
+        populationFitness[i] = currentPopulationAndFitness[i][currentPopulationAndFitness[i].length - 1];
+
         indices[i] = i;
     }
 
     // Rank Scaling
 
-    indices.sort(function (lhs, rhs) { return currentPopulationFitness[lhs] < currentPopulationFitness[rhs] ? -1 : currentPopulationFitness[lhs] > currentPopulationFitness[rhs] ? 1 : 0; });
+    indices.sort(function (lhs, rhs) { return populationFitness[lhs] < populationFitness[rhs] ? -1 : populationFitness[lhs] > populationFitness[rhs] ? 1 : 0; });
 
     let newPopulation = new Array(populationSize);
 
     for (let i = 0; i < populationSize; ++i) {
         newPopulation[i] = currentPopulation[indices[i]];
+
         if(i === 0) {
             console.log(currentPopulation[indices[i]]);
-            console.log(currentPopulationFitness[indices[i]]);
+            console.log(populationFitness[indices[i]]);
         }
-        currentPopulationFitness[i] = 1 / Math.sqrt(i + 1);
+
+        populationFitness[i] = 1 / Math.sqrt(i + 1);
     }
 
     let crossoverCount = Math.floor(crossoverProbability * populationSize);
@@ -92,7 +98,7 @@ const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLa
     for (let i = 0; i < populationSize; ++i) {
         currentPopulation[i] = newPopulation[i];
         if(i >= eliteCount && i < eliteCount + crossoverCount) {
-            sum += currentPopulationFitness[eliteCount + i];
+            sum += populationFitness[eliteCount + i];
         }
     }
 
@@ -105,14 +111,14 @@ const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLa
 
     for (let i = 0; i < crossoverCount; i += 2) {
         while (currentSum < i * step + randomOffset) {
-            currentSum += currentPopulationFitness[eliteCount + stepIndex];
+            currentSum += populationFitness[eliteCount + stepIndex];
             stepIndex += 1;
         }
 
         let offspring = [currentPopulation[eliteCount + stepIndex], []];
 
         while (currentSum < (i + 1) * step + randomOffset) {
-            currentSum += currentPopulationFitness[eliteCount + stepIndex];
+            currentSum += populationFitness[eliteCount + stepIndex];
             stepIndex += 1;
         }
 
@@ -125,10 +131,14 @@ const GeneticAlgorithm = (populationSize, currentPopulation, currentPopulationLa
     }
 
     for(let i = 0; i < populationSize - eliteCount - crossoverCount; ++i) {
-        newPopulation[eliteCount + crossoverCount + i] = Mutate(currentPopulation[eliteCount + crossoverCount + i], dimension);
+        newPopulation[eliteCount + crossoverCount + i] = Mutate(currentPopulation[eliteCount + crossoverCount + i], lowerBound, upperBound, dimension);
     }
 
-    return [newPopulation, addPoints(functionEquation, newPopulation)];
+    for(let i = 0; i < populationSize; ++i) {
+        newPopulation[i].push(evaluate(functionEquation, newPopulation[i]));
+    }
+
+    return newPopulation;
 
 }
 

@@ -44,26 +44,4 @@ function gaussianRandom(mean, stdev) {
     return -retval;
 }
 
-
-function addPoints(functionEquation, values) {
-    const app = window.mainDisplay;
-
-    let labels = [];
-
-    for (let i = 0; i < values.length; ++i) {
-        const label = app.evalCommandGetLabels("(" + values[i].join() + "," + evaluate(functionEquation, values[i].slice(0, values[i].length)) + ")");
-        labels.push(label);
-    }
-
-    return labels;
-}
-
-function removePoints(labels) {
-    const app = window.mainDisplay;
-
-    for (let i = 0; i < labels.length; ++i) {
-        app.deleteObject(labels[i])
-    }
-}
-
-export { evaluate, randomNumberInRange, gaussianRandom, addPoints, removePoints };
+export { evaluate, randomNumberInRange, gaussianRandom };
