@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Geogebra from 'react-geogebra'
 import { evaluate, removePoints } from './Components'
 import { GeneticAlgorithm } from "./GeneticAlgorithm";
 
 function App() {
+    const ref = useRef(null);
     const [appletLoaded, setAppletLoaded] = useState(false);
     const [functionEquation, setFunctionEquation] = useState("");
     const [functionEquationLabel, setFunctionEquationLabel] = useState("");
@@ -38,6 +39,20 @@ function App() {
 
         setFunctionEquationLabel(app.evalCommandGetLabels(event.target.value));
 
+        const selected = ref.current;
+
+        if(event.target.value.search("y") === -1) {
+            if(dimension !== 2) {
+                setDimension(2);
+                app.setPerspective('G');
+            }
+        } else if (dimension === 2) {
+            setDimension(3);
+            app.setPerspective('T');
+        }
+
+        selected.focus();
+
         console.log("Function updated");
     }
 
@@ -47,18 +62,6 @@ function App() {
 
     const processUpperBound = (event) => {
         setUpperBound(event.target.value);
-    }
-
-    const processDimension = (event) => {
-        const app = window.mainDisplay;
-
-        setDimension(event.target.value);
-
-        if(parseInt(event.target.value) === 3) {
-            app.setPerspective('T');
-        } else {
-            app.setPerspective('G');
-        }
     }
 
     const evolveGeneticAlgorithm = () => {
@@ -72,8 +75,8 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-500 flex flex-row">
-            <div className="mx-6 pt-6">
+        <div className="min-h-screen bg-whites flex flex-row">
+            <div className="p-6">
                 <Geogebra
                     id="mainDisplay"
                     width="400"
@@ -87,41 +90,29 @@ function App() {
                 />
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    Equation (in terms of x and y (optional)): <input className="bg-slate-300" type="text" value={functionEquation}
-                        onChange={changeFunction} disabled={!appletLoaded} />
-                </div>
+            <div className="p-6 flex flex-col">
+                <div className="w-half flex flex-col">
+                    Equation (in terms of x and y):
+                        <input className="border rounded" type="text" value={functionEquation}
+                                onChange={changeFunction} ref={ref} disabled={!appletLoaded} />
 
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    Lower Bound: <input className="bg-slate-300" type="text" value={lowerBound} onChange={processLowerBound}
-                        disabled={!appletLoaded || !functionValid} />
-                </div>
+                    Lower Bound:
+                    <input className="border rounded" type="text" value={lowerBound} onChange={processLowerBound}
+                        disabled={!appletLoaded} />
 
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    Upper Bound: <input className="bg-slate-300" type="text" value={upperBound} onChange={processUpperBound}
-                        disabled={!appletLoaded || !functionValid} />
-                </div>
+                    Upper Bound:
+                    <input className="border rounded" type="text" value={upperBound} onChange={processUpperBound}
+                            disabled={!appletLoaded} />
 
-
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    Dimension (2 if 2D function and 3 if 3D function): <input className="bg-slate-300" type="text" value={dimension} onChange={processDimension}
-                        disabled={!appletLoaded || !functionValid} />
-                </div>
-
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    <button className="bg-slate-300" onClick={evolveGeneticAlgorithm} disabled={!appletLoaded || !functionValid}>
+                    <button className="border rounded mt-6 w-half" onClick={evolveGeneticAlgorithm} disabled={!appletLoaded || !functionValid}>
                         Generate/Evolve Genetic Algorithm
                     </button>
-                </div>
 
-                <div className="bg-white m-3 p-3 w-half h-10">
-                    <button className="bg-slate-300" onClick={resetGeneticAlgorithm} disabled={!appletLoaded || !functionValid}>
-                        Reset Genetic Algorithm
+                    <button className="border rounded mt-6 w-half" onClick={resetGeneticAlgorithm} disabled={!appletLoaded}>
+                    Reset Genetic Algorithm
                     </button>
-                </div>
+                    </div>
             </div>
-
         </div>
     );
 }
