@@ -89,7 +89,7 @@ function App() {
 
             <div className="grid grid-cols-2 gap-2">
                 <div className="bg-white m-3 p-3 w-half h-10">
-                    Equation (in terms of x): <input className="bg-slate-300" type="text" value={functionEquation}
+                    Equation (in terms of x and y (optional)): <input className="bg-slate-300" type="text" value={functionEquation}
                         onChange={changeFunction} disabled={!appletLoaded} />
                 </div>
 
@@ -105,7 +105,7 @@ function App() {
 
 
                 <div className="bg-white m-3 p-3 w-half h-10">
-                    Dimension: <input className="bg-slate-300" type="text" value={dimension} onChange={processDimension}
+                    Dimension (2 if 2D function and 3 if 3D function): <input className="bg-slate-300" type="text" value={dimension} onChange={processDimension}
                         disabled={!appletLoaded || !functionValid} />
                 </div>
 
