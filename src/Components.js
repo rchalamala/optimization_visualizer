@@ -3,8 +3,6 @@ function evaluate(functionEquation, x) {
 
     //console.log("Function value evaluated");
 
-    console.log("called")
-
     if(functionEquation.search('x') === -1) {
         return "";
     }
@@ -15,11 +13,7 @@ function evaluate(functionEquation, x) {
         x_substituted = x_substituted.replace(/y/g, "(" + x[1] + ")");
     }
 
-    console.log(x_substituted)
-
     let result = app.evalCommandCAS("Numeric(" + x_substituted + ", 50)");
-
-    console.log(result);
 
     if (result === '?' || result === "") {
         return "";

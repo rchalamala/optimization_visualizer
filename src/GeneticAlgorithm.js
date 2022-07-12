@@ -19,14 +19,14 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
     const [population, setPopulation] = useState([]);
     const [populationLabels, setPopulationLabels] = useState([]);
 
-    const reset = useCallback(() => {
+    const reset = useCallback((iterations, populationLabels) => {
         if(iterations) {
             removePoints(populationLabels);
             setPopulation([]);
             setPopulationLabels([]);
             setIterations(0);
         }
-    }, [iterations, populationLabels]);
+    }, []);
 
     useEffect(() => {
         reset();
@@ -48,7 +48,7 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
             setLowerBoundValid(false);
             setBoundsValid(true);
         }
-        reset();
+        reset(iterations, populationLabels);
     }
     
     const processUpperBound = (event) => {
@@ -63,7 +63,7 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
             setUpperBoundValid(false);
             setBoundsValid(true);
         }
-        reset();
+        reset(iterations, populationLabels);
     }
 
     const processPopulationSize = (event) => {
@@ -78,7 +78,7 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
             setPopulationSizeValid(false);
             setAlgorithmParametersValid(true);
         }
-        reset();
+        reset(iterations, populationLabels);
     }
 
     const processEliteCount = (event) => {
@@ -93,7 +93,7 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
             setEliteCountValid(false);
             setAlgorithmParametersValid(true);
         }
-        reset();
+        reset(iterations, populationLabels);
     }
 
     const processCrossoverProbability = (event) => {
@@ -108,7 +108,7 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
             setCrossoverProbabilityValid(false);
             setAlgorithmParametersValid(true);
         }
-        reset();
+        reset(iterations, populationLabels);
     }
 
     const initializePopulation = (populationSize) => {
@@ -249,8 +249,12 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
     };
     
     const processEvolve = () => {
-        evolve(200, 1, 0.8);
+        evolve();
         setIterations(iterations + 1);
+    }
+
+    const processReset = () => {
+        reset(iterations, populationLabels);
     }
 
     return (
@@ -307,7 +311,7 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
             </div>
 
             <div className="pb-4">
-                <button className="border rounded px-2" onClick={reset} disabled={!appletLoaded}>
+                <button className="border rounded px-2" onClick={processReset} disabled={!appletLoaded}>
                     Reset Genetic Algorithm
                 </button>
             </div>
