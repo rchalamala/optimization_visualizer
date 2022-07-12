@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import Geogebra from 'react-geogebra'
-import { evaluate, removePoints } from './Components'
-import { GeneticAlgorithm } from "./GeneticAlgorithm";
+import { evaluate } from './Components'
+import { GeneticAlgorithm,  } from "./GeneticAlgorithm";
 
 function App() {
     const ref = useRef(null);
@@ -9,9 +9,6 @@ function App() {
     const [functionEquation, setFunctionEquation] = useState("");
     const [functionEquationLabel, setFunctionEquationLabel] = useState("");
     const [functionValid, setFunctionValid] = useState(false);
-    const [populationAndLabels, setPopulationAndLabels] = useState([[], []]);
-    const [lowerBound, setLowerBound] = useState(0);
-    const [upperBound, setUpperBound] = useState(0);
     const [dimension, setDimension] = useState(2);
 
     const appletOnLoad = () => {
@@ -56,24 +53,6 @@ function App() {
         console.log("Function updated");
     }
 
-    const processLowerBound = (event) => {
-        setLowerBound(event.target.value);
-    }
-
-    const processUpperBound = (event) => {
-        setUpperBound(event.target.value);
-    }
-
-    const evolveGeneticAlgorithm = () => {
-        setPopulationAndLabels(GeneticAlgorithm(200, populationAndLabels[0], populationAndLabels[1], functionEquation, parseFloat(lowerBound), parseFloat(upperBound), parseInt(dimension), 1, 0.8));
-    }
-
-    const resetGeneticAlgorithm = () => {
-        removePoints(populationAndLabels[1]);
-
-        setPopulationAndLabels([[], []]);
-    }
-
     return (
         <div className="min-h-screen flex flex-col items-center md:flex-row">
             <div className="p-6">
@@ -83,38 +62,29 @@ function App() {
                     height="500"
                     showMenuBar={false}
                     showToolBar={false}
-                    showAlgebraInput
                     appletOnLoad={appletOnLoad}
                     errorDialogsActive={false}
                     perspective={'G'}
                 />
             </div>
 
-            <div className="p-6 flex flex-row">
-                <div className="w-half flex flex-col">
+
+            <div>
+                <div className="py-2 w-half flex flex-col">
                     Equation (in terms of x and y):
-                        <input className="border rounded px-2" type="text" value={functionEquation}
-                                onChange={changeFunction} ref={ref} disabled={!appletLoaded} />
+                    <input className="border rounded px-2" type="text" value={functionEquation}
+                            onChange={changeFunction} ref={ref} disabled={!appletLoaded}/>
+                </div>
 
-                    Lower Bound:
-                    <input className="border rounded px-2" type="text" value={lowerBound} onChange={processLowerBound}
-                        disabled={!appletLoaded} />
 
-                    Upper Bound:
-                    <input className="border rounded px-2" type="text" value={upperBound} onChange={processUpperBound}
-                            disabled={!appletLoaded} />
-
-                    <button className="border rounded mt-6 px-2" onClick={evolveGeneticAlgorithm} disabled={!appletLoaded || !functionValid}>
-                        Generate/Evolve Genetic Algorithm
-                    </button>
-
-                    <button className="border rounded mt-6 px-2" onClick={resetGeneticAlgorithm} disabled={!appletLoaded}>
-                        Reset Genetic Algorithm
-                    </button>
-
+                <div className="pb-2">
                     Note: Right Click for Zoom to Fit
                 </div>
+
+                <GeneticAlgorithm appletLoaded={appletLoaded} functionEquation={functionEquation} functionValid={functionValid} dimension={dimension}/>
             </div>
+
+            
         </div>
     );
 }
