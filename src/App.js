@@ -30,8 +30,6 @@ function App() {
             console.log("Last object deleted");
         }
 
-        setFunctionValid(evaluate(event.target.value, 0) !== "" && evaluate(event.target.value, 0) !== "?");
-
         setFunctionEquation(event.target.value);
 
         setFunctionEquationLabel(app.evalCommandGetLabels(event.target.value));
@@ -43,9 +41,13 @@ function App() {
                 setDimension(2);
                 app.setPerspective('G');
             }
-        } else if (dimension === 2) {
-            setDimension(3);
-            app.setPerspective('T');
+            setFunctionValid(evaluate(event.target.value, [0]) !== "" && !isNaN(evaluate(event.target.value, [0])));
+        } else {
+            if(dimension === 2) {
+                setDimension(3);
+                app.setPerspective('T');
+            }
+            setFunctionValid(evaluate(event.target.value, [0, 0]) !== "" && !isNaN(evaluate(event.target.value, [0, 0])));
         }
 
         selected.focus();
@@ -71,7 +73,9 @@ function App() {
 
             <div>
                 <div className="py-2 w-half flex flex-col">
-                    Equation (in terms of x and y):
+                    <div className={functionValid ? "text-green-500" : "text-red-500"}>
+                        Equation (in terms of x and y):
+                    </div>
                     <input className="border rounded px-2" type="text" value={functionEquation}
                             onChange={changeFunction} ref={ref} disabled={!appletLoaded}/>
                 </div>

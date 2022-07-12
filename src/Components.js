@@ -3,11 +3,28 @@ function evaluate(functionEquation, x) {
 
     //console.log("Function value evaluated");
 
-    if (x.length === 1) {
-        return x === "" ? "" : parseFloat(app.evalCommandCAS("Numeric(" + functionEquation.replace(/x/g, "(" + x[0] + ")") + ", 50)"));
+    console.log("called")
+
+    if(functionEquation.search('x') === -1) {
+        return "";
+    }
+
+    let x_substituted = functionEquation.replace(/x/g, "(" + x[0] + ")");
+    
+    if(x.length === 2) {
+        x_substituted = x_substituted.replace(/y/g, "(" + x[1] + ")");
+    }
+
+    console.log(x_substituted)
+
+    let result = app.evalCommandCAS("Numeric(" + x_substituted + ", 50)");
+
+    console.log(result);
+
+    if (result === '?' || result === "") {
+        return "";
     } else {
-        //console.log(app.evalCommandCAS("Numeric(" + functionEquation.replace(/x/g, "(" + x[0] + ")").replace(/y/g, "(" + x[1] + ")") + ", 50)"));
-        return x === "" ? "" : parseFloat(app.evalCommandCAS("Numeric(" + functionEquation.replace(/x/g, "(" + x[0] + ")").replace(/y/g, "(" + x[1] + ")") + ", 50)"));
+        return parseFloat(result);
     }
 }
 

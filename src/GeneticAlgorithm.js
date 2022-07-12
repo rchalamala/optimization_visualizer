@@ -15,7 +15,7 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
     const [crossoverProbability, setCrossoverProbability] = useState(0.8);
     const [crossoverProbabilityValid, setCrossoverProbabilityValid] = useState(true);
     const [algorithmParametersValid, setAlgorithmParametersValid] = useState(true);
-    const [parametersValid, setParametersValid] = useState(true);
+    const [parametersValid, setParametersValid] = useState(false);
     const [population, setPopulation] = useState([]);
     const [populationLabels, setPopulationLabels] = useState([]);
 
@@ -296,8 +296,8 @@ export function GeneticAlgorithm({appletLoaded, functionEquation, functionValid,
                     disabled={!appletLoaded}/>
             </div>
 
-            <div className={"pt-2 " + parametersValid ? "text-green-500" : "text-red-500"}>
-                Parameters {parametersValid && "in"}valid!
+            <div className={"pt-2 " + (parametersValid ? "text-green-500" : "text-red-500")}>
+                Parameters {!parametersValid && "in"}valid!
             </div>
 
             <div className="py-4">
